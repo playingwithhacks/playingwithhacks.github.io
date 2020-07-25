@@ -1,0 +1,191 @@
+
+<!DOCTYPE html>
+<html lang="en" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>3KCTF-WRITEUPS(WEB) - PlayingWithHacks</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Fechin,"> 
+    <meta name="description" content="3kCTF Write ups for webReporter123456Title: reporterAuthor: rekter0Description: Reporter is an onli,"> 
+    <meta name="author" content="Captain-K"> 
+    <link rel="alternative" href="atom.xml" title="PlayingWithHacks" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+
+	<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({
+              google_ad_client: "ca-pub-8691406134231910",
+              enable_page_level_ads: true
+         });
+    </script>
+    <script async custom-element="amp-auto-ads"
+        src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js">
+    </script>
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">PlayingWithHacks</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="http://yoursite.com"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">3KCTF-WRITEUPS(WEB)</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">3KCTF-WRITEUPS(WEB)</h1>
+        <div class="stuff">
+            <span>July 25, 2020</span>
+            
+  <ul class="post-tags-list" itemprop="keywords"><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/web/" rel="tag">web</a></li></ul>
+
+
+        </div>
+        <div class="content markdown">
+            <h1 id="3kCTF-Write-ups-for-web"><a href="#3kCTF-Write-ups-for-web" class="headerlink" title="3kCTF Write ups for web"></a>3kCTF Write ups for web</h1><h2 id="Reporter"><a href="#Reporter" class="headerlink" title="Reporter"></a>Reporter</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Title: reporter</span><br><span class="line">Author: rekter0</span><br><span class="line">Description: Reporter is an online markdown reporting tool.</span><br><span class="line">it&#39;s free to use for everyone.</span><br><span class="line">there&#39;s a secret report we need located</span><br><span class="line">&#96;In this challenge we were given the Source code&#96;</span><br></pre></td></tr></table></figure>
+<p>In this challenge<br>We are greeted with a markdown to html converter and we can create a report.<br>My first thought’s were xss and i randomly tried a few payloads after reaching no where I decided to go through the source code(better late then never lol :P)<br>while going through the source i found that<br>when an image it provided rather than displaying it direclty it does an<br><code>base64_encode(fetch_remote_file($value))</code>of the img url<br>hmm SSRF..<br>so i set it up loaclly and started trying how to bypass <code>fetch_remote_file</code> function which does quite a few checks </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line">function fetch_remote_file($url) &#123;</span><br><span class="line">    $config[&#39;disallowed_remote_hosts&#39;] &#x3D; array(&#39;localhost&#39;);</span><br><span class="line">    $config[&#39;disallowed_remote_addresses&#39;] &#x3D; array(&quot;0.0.0.0&#x2F;8&quot;, &quot;10.0.0.0&#x2F;8&quot;, &quot;100.64.0.0&#x2F;10&quot;, &quot;127.0.0.0&#x2F;8&quot;, &quot;169.254.0.0&#x2F;16&quot;, &quot;172.16.0.0&#x2F;12&quot;, &quot;192.0.0.0&#x2F;29&quot;, &quot;192.0.2.0&#x2F;24&quot;, &quot;192.88.99.0&#x2F;24&quot;, &quot;192.168.0.0&#x2F;16&quot;, &quot;198.18.0.0&#x2F;15&quot;, &quot;198.51.100.0&#x2F;24&quot;, &quot;203.0.113.0&#x2F;24&quot;, &quot;224.0.0.0&#x2F;4&quot;, &quot;240.0.0.0&#x2F;4&quot;,);</span><br><span class="line">    $url_components &#x3D; @parse_url($url);</span><br><span class="line">    if (!isset($url_components[&#39;scheme&#39;])) &#123;</span><br><span class="line">        return false;</span><br><span class="line">    &#125;</span><br><span class="line">    if (@($url_components[&#39;port&#39;])) &#123;</span><br><span class="line">        return false;</span><br><span class="line">    &#125;</span><br><span class="line">    if (!$url_components) &#123;</span><br><span class="line">        return false;</span><br><span class="line">    &#125;</span><br><span class="line">    if ((!empty($url_components[&#39;scheme&#39;]) &amp;&amp; !in_array($url_components[&#39;scheme&#39;], array(&#39;http&#39;, &#39;https&#39;)))) &#123;</span><br><span class="line">        return false;</span><br><span class="line">    &#125;</span><br><span class="line">    if (array_key_exists(&quot;user&quot;, $url_components) || array_key_exists(&quot;pass&quot;, $url_components)) &#123;</span><br><span class="line">        return false;</span><br><span class="line">    &#125;</span><br><span class="line">    if ((!empty($config[&#39;disallowed_remote_hosts&#39;]) &amp;&amp; in_array($url_components[&#39;host&#39;], $config[&#39;disallowed_remote_hosts&#39;]))) &#123;</span><br><span class="line">        return false;</span><br><span class="line">    &#125;</span><br><span class="line">    $addresses &#x3D; get_ip_by_hostname($url_components[&#39;host&#39;]);</span><br><span class="line">    $destination_address &#x3D; $addresses[0];</span><br><span class="line">    if (!empty($config[&#39;disallowed_remote_addresses&#39;])) &#123;</span><br><span class="line">        foreach ($config[&#39;disallowed_remote_addresses&#39;] as $disallowed_address) &#123;</span><br><span class="line">            $ip_range &#x3D; fetch_ip_range($disallowed_address);</span><br><span class="line">            $packed_address &#x3D; my_inet_pton($destination_address);</span><br><span class="line">            if (is_array($ip_range)) &#123;</span><br><span class="line">                if (strcmp($ip_range[0], $packed_address) &lt;&#x3D; 0 &amp;&amp; strcmp($ip_range[1], $packed_address) &gt;&#x3D; 0) &#123;</span><br><span class="line">echo &#39;pass&#39;;</span><br><span class="line"></span><br><span class="line">                    return false;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; elseif ($destination_address &#x3D;&#x3D; $disallowed_address) &#123;</span><br><span class="line">echo &#39;pass2&#39;;</span><br><span class="line">                return false;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">echo &#39;pass3&#39;;</span><br><span class="line">    $opts &#x3D; array(&#39;http&#39; &#x3D;&gt; array(&#39;follow_location&#39; &#x3D;&gt; 0,));</span><br><span class="line">    $context &#x3D; stream_context_create($opts);</span><br><span class="line">    return file_get_contents($url, false, $context);</span><br><span class="line">&#125;</span><br><span class="line">function get_ip_by_hostname($hostname) &#123;</span><br><span class="line">    $addresses &#x3D; @gethostbynamel($hostname);</span><br><span class="line">    if (!$addresses) &#123;</span><br><span class="line">        $result_set &#x3D; @dns_get_record($hostname, DNS_A);</span><br><span class="line">        if ($result_set) &#123;</span><br><span class="line">            $addresses &#x3D; array_column($result_set, &#39;ip&#39;);</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            return false;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return $addresses;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>its using parse_url which we all know its xtremely buggy lol<br>so i could easily get an lfi using the payload <code>http:a../../../../../../../etc/passwd</code><br>now i could read files and i tried reading <code>http:a../../../../../../../var/www/html/secret-report/index.php</code> and stuff like that but did’nt get anything<br>so my next step was to get ssrf to read localhost files<br>but there is a check which prevents us to do a direct ssrf payload like <code>http://127.0.0.1/sercre-report</code><br>So i started looking for alternatives and found that its checks basically work for only ipv4 why not do ssrf using an  ipv6 ip<br>so i used <code>http://[::ffff:7f00:1]/sercret-report</code> and was able to get the contents of sercet-report<br>there were 2 php files<br>now it was a simple matter of using the previous lfi to read them<br>payload-<code>![](http:a../../../../../../../../../../../var/www
+/html/secret_report/3ac45ca05705d39ed27d7baa8b70ecd560b69902.php)</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">FLAG:3k&#123;ssrf_bug_f068b29b58ccd0&#125;</span><br></pre></td></tr></table></figure>
+<p>I GOT FIRST BLOOD ON IT TOO :)</p>
+<h1 id="carthagods"><a href="#carthagods" class="headerlink" title="carthagods"></a>carthagods</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Author: rekter0, Dali</span><br><span class="line">Title: carthagods!</span><br><span class="line">Description: Salute the carthagods!</span><br></pre></td></tr></table></figure>
+<p>The challenge provided a redacted source code</p>
+<p>When we visited the page it seemed like a basic information providing site in which we had<br>several options like</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Baal        -&gt;  &#x2F;baal</span><br><span class="line">Tanit       -&gt;  &#x2F;tanit</span><br><span class="line">Dido        -&gt;  &#x2F;dido</span><br><span class="line">caelestis   -&gt;  &#x2F;caelestis</span><br><span class="line">phpinfo     -&gt;  &#x2F;info.php</span><br><span class="line">FLAG        -&gt;  &#x2F;flag.php</span><br></pre></td></tr></table></figure>
+<p>The server seems to be using <code>mod_rewrite</code> accorind to the .htaccess<br>so from the source we can see that</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">		$file&#x3D;$_GET[*REDACTED*];</span><br><span class="line">		$f&#x3D;file_get_contents(&#39;thecarthagods&#x2F;&#39;.$file);</span><br><span class="line">		if (!preg_match(&quot;&#x2F;&lt;\?php&#x2F;i&quot;, $f))&#123;</span><br><span class="line">		    echo $f;</span><br><span class="line">		&#125;else&#123;</span><br><span class="line">			echo &#39;php content detected&#39;;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<p>there is a secret parameter and an file_get_contents() is being used on it.<br>So if we can find the secret parameter we have arbitary lfi<br>and since its using <code>mod_rewrite</code> if we access  <code>http://carthagods.3k.ctf.to:8039/js</code><br>it will redirect us to <code>http://carthagods.3k.ctf.to:8039/js/?eba1b61134bf5818771b8c3203a16dc9=js.</code><br>hence the parameter we are looking for is <code>eba1b61134bf5818771b8c3203a16dc9</code><br>Next we need to read flag.php<br>but there is a check which checks if the file content includes <code>&lt;?php</code>.hmm<br>i was stuck here for quite some time<br>and then went back to basics and checked info.php <code>phpinfo</code><br>and found its using opcache.<br>I remembered that in a previous ctf also we had used opcache to get a blacklisted file.<br>Now, i can realize there will be a cache file of <code>flag.php</code>. And that will not contains <code>&lt;?php</code> (As the page was filtering that string, we need to bypass).<br>The next thing to do is to find the <code>system_id</code> as the path to the opchache is<br><code>/var/www/cache/{system_id}/var/www/html/&lt;file&gt;.bin</code></p>
+<p>here i used the <a href="https://github.com/GoSecure/php7-opcache-override" target="_blank" rel="noopener">tool</a> and was able to get the system id<br><code>Payload: http://carthagods.3k.ctf.to:8039/?eba1b61134bf5818771b8c3203a16dc9=../../../../../
+../var/www/cache/e2c6579e4df1d9e77e36d2f4ff8c92b3/
+var/www/html/flag.php.bin</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flag:3k&#123;Hail_the3000_years_7hat_are_b3h1nd&#125;</span><br></pre></td></tr></table></figure>
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title='0' data-url='http://link.hhtjim.com/163/425570952.mp3'></li>
+                        
+                    
+                        
+                            <li title='1' data-url='http://link.hhtjim.com/163/425570952.mp3'></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+    <div id='gitalk-container' class="comment link"
+		data-enable='false'
+        data-ae='false'
+        data-ci=''
+        data-cs=''
+        data-r=''
+        data-o=''
+        data-a=''
+        data-d='false'
+    >View comments</div>
+
+
+    </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+</html>
