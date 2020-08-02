@@ -102,7 +102,7 @@
 <p>parse_url()[‘scheme’]==’http|https’<br>and include reads that file<br>to do this we can use a payload like http:asd../../../../../../<file><br>what this does is that it tricks parse_url such that the scheme is shown as http and the path is taken as the rest, Now what include does it it takes the whole thing as a internal path as its not in proper  url format and includes the file.<br>Yay so now we can get rce via uploading some arbitary file with php content ie <?php var_dump(scandir('.;)); ?>.<br>The flag was in config.php</file></p>
 </blockquote>
 <h3 id="FLAG"><a href="#FLAG" class="headerlink" title="FLAG"></a>FLAG</h3><p><code>inctf{REQU357_5MUGG71NG_4ND_1NCLUD3_F0R_TH3_W1N}</code></p>
-<h1 id="XSQLI"><a href="#XSQLI" class="headerlink" title="XSQLI"></a>XSQLI</h1><p>Az3z3l can explain it much better than me go check this blog<br><a href="https://az3z3l.github.io/pages/contents.html" target="_blank" rel="noopener">Writeup</a></p>
+<h1 id="XSQLI"><a href="#XSQLI" class="headerlink" title="XSQLI"></a>XSQLI</h1><p>Az3z3l can explain it much better than me<br><a href="https://github.com/Az3z3l/XQLi" target="_blank" rel="noopener">Writeup</a></p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
